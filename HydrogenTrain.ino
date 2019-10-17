@@ -33,7 +33,16 @@ const int led = 13;
 /*-------------------------------------------Train Methods---------------------------------------------*/
 
 //Test to check, debug and calibrate Train Movement and holding Points
-void testMove() {
+void testMoveRueckwaerts() {
+    server.send(200, "text/plain", "10 sek rueckwaerts");
+    myTrainHub.setLedColor(RED);
+    delay(1000);
+    myTrainHub.setMotorSpeed(_port, -35);
+    delay(10000);
+    myTrainHub.stopMotor(_port);   
+}
+void testMoveVorwaerts() {
+    server.send(200, "text/plain", "10 sek vorwaerts");
     myTrainHub.setLedColor(RED);
     delay(1000);
     myTrainHub.setMotorSpeed(_port, 35);
@@ -103,13 +112,20 @@ void setup(void) {
   lcd.init();
   lcd.backlight(); //Hintergrundbeleuchtung einschalten (lcd.noBacklight(); schaltet die Beleuchtung aus). 
   lcd.setCursor(0, 0);
-  lcd.print("Connecting Wifi..."); 
-
+  lcd.print("Connecting Wifi");
+  delay(100); 
+  lcd.setCursor(0, 0);
+  int retry = 0;
   // Wait for connection
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
+    retry = retry + 1;
+    if(retry >= 60){
+      ESP.restart();
+    }
   }
+  retry = 0;
   Serial.println("");
   Serial.print("Connected to ");
   Serial.println(ssid);
@@ -124,14 +140,19 @@ void setup(void) {
 
   //server.on("/fillingTank", fillingTank);
 
-  server.on("/testMove", testMove);
+  server.on("/testmovevorwaerts", testMoveVorwaerts);
+
+  server.on("/testmoverueckwaerts", testMoveRueckwaerts);
 
   server.onNotFound(handleNotFound);
 
   server.begin();
   Serial.println("HTTP server started");
 
-  lcd.print("Connecting BLE...");
+  lcd.setCursor(0, 0);
+  lcd.print("Connecting BLE ");
+  delay(200);
+  lcd.setCursor(0, 0);
   
   myTrainHub.init(); // initalize the PoweredUpHub instance
   while(true) {
@@ -140,8 +161,6 @@ void setup(void) {
       if (myTrainHub.isConnected()) {
         Serial.println("Connected to HUB");
         break;
-      } else {
-        Serial.println("Failed to connect to HUB");
       }
     }
   }
@@ -149,7 +168,7 @@ void setup(void) {
   lcd.setCursor(0, 0);
   lcd.print("Hydrogen Train"); 
   lcd.setCursor(0, 1);
-  lcd.print("Company XYZ"); 
+  lcd.print(WiFi.localIP()); 
 }
 
 /*-------------------------------------------Main loop-------------------------------------------------*/
