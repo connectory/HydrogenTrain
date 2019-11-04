@@ -1,0 +1,154 @@
+
+<html>
+	<head>
+		<style>
+			body{
+					font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+				}
+			li  {
+					border: 2px solid #e6e6e6;
+					padding: 4px;
+					margin: 3px;
+					list-style-type: none;
+				}
+			a   {
+					display: -webkit-box;
+					display: -moz-box;
+					display: -ms-flexbox;
+					display: -webkit-flex;
+					display: flex;
+					align-items: center;
+					justify-content: flex-start;
+					text-decoration: none;
+					color: grey;
+				}
+			h4   {
+					margin-left: 2em; 
+				}
+						
+			p .pricetag   {
+					margin: auto;
+					margin-left: 18em;
+					position: absolute;
+					display: flex;
+					align-items: center;
+					vertical-align: center;
+				}
+			p .pricetimeout   {
+					margin: auto;
+					margin-left: 25em;
+					position: absolute;
+					display: flex;
+					align-items: center;
+					vertical-align: center;
+				}
+			img {
+					margin-left: 2em;
+				}
+		</style>
+	</head>
+	<script data-main="scripts/main" src="scripts/require.js"></script>
+	<script>
+		
+		function refreshAllPriceTags() {
+			for (var prop in prices) {
+				var newPriceTag = getPriceTag(prop);
+				document.getElementById(prop).innerHTML = prices.prop;
+			}
+			var json = JSON.stringify(prices);
+			var data = new FormData();
+			data.append("data" , json);		
+			var xhr = new XMLHttpRequest();
+			xhr.open( 'post', 'http://127.0.0.1:8080/scripts/jsonsaver.php', true );
+			xhr.send(data);
+		}
+		
+		function getPriceTag(company) {
+			return "Preis pro Liter: " + prices[company] + " bytes";
+		}
+		
+		function onLoad() {
+			setInterval(refreshAllPriceTags, 1000);
+		}
+		
+		
+	</script>
+	<body onload="onLoad()">
+		<div>
+			<ul>
+				<li>
+					<a href=#/><img title="Informationen" src="./img/agip.jpg" alt=Logo width=40 height=40> <h4>Agip</h4> <p class="pricetag" id="Agip">Preis pro Liter: 10 bytes</p> <p class="pricetimeout" id="Agiptimeout">Preis pro Liter: 10 bytes</p></a>
+				</li>
+				<li>
+					<a href=#/><img title="Informationen" src="./img/aral.jpg" alt=Logo width=40 height=40> <h4>Aral</h4> <p id="Aral">Preis pro Liter: 10 bytes</p></a>
+				</li>
+				<li>
+					<a href=#/><img title="Informationen" src="./img/avia.jpg"alt=Logo width=40 height=40> <h4>Avia</h4> <p id="Avia">Preis pro Liter: 10 bytes</p></a>
+				</li>
+				<li>
+					<a href=#/> <img title="Informationen" src="./img/baywa.jpg"alt=Logo width=40 height=40> <h4>BayWa</h4> <p id="BayWa">Preis pro Liter: 10 bytes</p></a>
+				</li>
+				<li>
+					<a href=#/> <img title="Informationen" src="./img/bft.jpg"alt=Logo width=40 height=40> <h4>bft</h4> <p id="bft">Preis pro Liter: 10 bytes</p></a>
+				</li>
+				<li>
+					<a href=#/> <img title="Informationen" src="./img/classic.jpg"alt=Logo width=40 height=40> <h4>Classic</h4> <p id="Classic">Preis pro Liter: 10 bytes</p></a>
+				</li>
+				<li>
+					<a href=#/> <img title="Informationen" src="./img/ed.jpg"alt=Logo width=40 height=40> <h4>ED</h4> <p id="ED">Preis pro Liter: 10 bytes</p></a>
+				</li>
+				<li>
+					<a href=#/> <img title="Informationen" src="./img/elan.jpg"alt=Logo width=40 height=40> <h4>Elan</h4> <p id="Elan">Preis pro Liter: 10 bytes</p></a>
+				</li>
+				<li>
+					<a href=#/> <img title="Informationen" src="./img/esso.jpg"alt=Logo width=40 height=40> <h4>Esso</h4> <p id="Esso">Preis pro Liter: 10 bytes</p></a>
+				</li>
+				<li>
+					<a href=#/> <img title="Informationen" src="./img/go.jpg"alt=Logo width=40 height=40> <h4>GO</h4> <p id="GO">Preis pro Liter: 10 bytes</p></a>
+				</li>
+				<li>
+					<a href=#/> <img title="Informationen" src="./img/hem.jpg"alt=Logo width=40 height=40> <h4>HEM</h4> <p id="HEM">Preis pro Liter: 10 bytes</p></a>
+				</li>
+				<li>
+					<a href=#/> <img title="Informationen" src="./img/hoyer.jpg"alt=Logo width=40 height=40> <h4>Hoyer</h4> <p id="Hoyer">Preis pro Liter: 10 bytes</p></a>
+				</li>
+				<li>
+					<a href=#/> <img title="Informationen" src="./img/jet.jpg"alt=Logo width=40 height=40> <h4>Jet</h4> <p id="Jet">Preis pro Liter: 10 bytes</p></a>
+				</li>
+				<li>
+					<a href=#/> <img title="Informationen" src="./img/markant.jpg"alt=Logo width=40 height=40> <h4>Markant</h4> <p id="Markant">Preis pro Liter: 10 bytes</p></a>
+				</li>
+				<li>
+					<a href=#/> <img title="Informationen" src="./img/oil.jpg"alt=Logo width=40 height=40> <h4>Oil</h4> <p id="Oil">Preis pro Liter: 10 bytes</p></a>
+				</li>
+				<li>
+					<a href=#/> <img title="Informationen" src="./img/omv.jpg"alt=Logo width=40 height=40> <h4>Omv</h4> <p id="Omv">Preis pro Liter: 10 bytes</p></a>
+				</li>
+				<li>
+					<a href=#/> <img title="Informationen" src="./img/q1.jpg"alt=Logo width=40 height=40> <h4>Q1</h4> <p id="Q1">Preis pro Liter: 10 bytes</p></a>
+				</li>
+				<li>
+					<a href=#/> <img title="Informationen" src="./img/raiffeisen.jpg"alt=Logo width=40 height=40> <h4>Raiffeisen</h4> <p id="Raiffeisen">Preis pro Liter: 10 bytes</p></a>
+				</li>
+				<li>
+					<a href=#/> <img title="Informationen" src="./img/shell.jpg"alt=Logo width=40 height=40> <h4>Shell</h4> <p id="Shell">Preis pro Liter: 10 bytes</p></a>
+				</li>
+				<li>
+					<a href=#/> <img title="Informationen" src="./img/sprint.jpg"alt=Logo width=40 height=40> <h4>Sprint</h4> <p id="Sprint">Preis pro Liter: 10 bytes</p></a>
+				</li>
+				<li>
+					<a href=#/> <img title="Informationen" src="./img/star.jpg"alt=Logo width=40 height=40> <h4>Star</h4> <p id="Star">Preis pro Liter: 10 bytes</p></a>
+				</li>
+				<li>
+					<a href=#/> <img title="Informationen" src="./img/team.jpg"alt=Logo width=40 height=40> <h4>Team</h4> <p id="Team">Preis pro Liter: 10 bytes</p></a>
+				</li>
+				<li>
+					<a href=#/> <img title="Informationen" src="./img/total.jpg"alt=Logo width=40 height=40> <h4>Total</h4> <p id="Total">Preis pro Liter: 10 bytes</p></a>
+				</li>
+				<li>
+					<a href=#/> <img title="Informationen" src="./img/westfalen.jpg"alt=Logo width=40 height=40> <h4>Westfalen</h4> <p id="Westfalen">Preis pro Liter: 10 bytes</p></a>
+				</li>
+			</ul>
+		</div>
+	</body>
+</html>
