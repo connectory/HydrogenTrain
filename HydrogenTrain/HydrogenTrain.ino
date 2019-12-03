@@ -49,16 +49,7 @@ const int led = 13;
 /*-------------------------------------------Train Methods---------------------------------------------*/
 
 //Test to check, debug and calibrate Train Movement and holding Points
-void testMoveRueckwaerts() {
-    server.send(200, "text/plain", "10 sek rueckwaerts");
-    myTrainHub.setLedColor(RED);
-    delay(1000);
-    myTrainHub.setMotorSpeed(_port, -35);
-    delay(10000);
-    myTrainHub.stopMotor(_port);   
-}
-void testMoveVorwaerts() {
-    server.send(200, "text/plain", "10 sek vorwaerts");
+void testMove() {
     myTrainHub.setLedColor(RED);
     delay(1000);
     myTrainHub.setMotorSpeed(_port, 35);
@@ -68,9 +59,7 @@ void testMoveVorwaerts() {
 
 //Main Method
 void fillingTank() {
-  server.send(200, "text/plain", "fillingTank");
-  bool trainSlowed = false;
-/*while(true) {
+  /*while(true) {
     fullValue = analogRead(waterSensorFull);
   emptyValue = analogRead(waterSensorEmpty);
   if(emptyValue >= 1000 && fullValue >= 1000) {
@@ -97,8 +86,8 @@ void fillingTank() {
   }*/
 
   myTrainHub.setLedColor(RED);
+  delay(1000);
   myTrainHub.setMotorSpeed(_port, 35);
-  delay(1500);
 
   while(true) {
     // Setting red filtered photodiodes to be read
@@ -107,7 +96,7 @@ void fillingTank() {
     // Reading the output frequency
     rfrequency = pulseIn(sensorOut, LOW);
     //Remaping the value of the frequency to the RGB Model of 0 to 255
-    //rfrequency = map(rfrequency, 25,72,255,0);
+    rfrequency = map(rfrequency, 25,72,255,0);
   
     // Setting Green filtered photodiodes to be read
     digitalWrite(S2,HIGH);
@@ -115,7 +104,7 @@ void fillingTank() {
     // Reading the output frequency
     gfrequency = pulseIn(sensorOut, LOW);
     //Remaping the value of the frequency to the RGB Model of 0 to 255
-    //gfrequency = map(gfrequency, 30,90,255,0);
+    gfrequency = map(gfrequency, 30,90,255,0);
   
     // Setting Blue filtered photodiodes to be read
     digitalWrite(S2,LOW);
@@ -123,87 +112,17 @@ void fillingTank() {
     // Reading the output frequency
     bfrequency = pulseIn(sensorOut, LOW);
     //Remaping the value of the frequency to the RGB Model of 0 to 255
-    //bfrequency = map(bfrequency, 25,70,255,0);
-
-    /*if(rfrequency <= 65 && rfrequency >= 45 && gfrequency <= 75 && gfrequency >= 50 && bfrequency <= 65 && gfrequency >= 40) {
-      //Table
-      continue;
-    } else if(rfrequency <=40 && rfrequency >= 34 && gfrequency <= 95 && gfrequency >= 78 && bfrequency <= 75 && gfrequency >= 64) {
-      //Red
-      if(lastStopSignal == 2) {
-        myTrainHub.stopMotor(_port);
-        break;
-      }
-      else {
-        lastStopSignal = 2;
-      }
-      Serial.println("Red Signal");
-    } else if(rfrequency <=40 && rfrequency >= 25 && gfrequency <= 40 && gfrequency >= 20 && bfrequency <= 60 && gfrequency >= 20) {
-      //Green
-      if(lastStopSignal == 1 && !trainSlowed) {
-        myTrainHub.setMotorSpeed(_port, 20);
-        trainSlowed = true;
-        lastStopSignal = 0;
-      }
-      else {
-        lastStopSignal = 1;
-      }
-      Serial.println("Yellow Signal");
-    } else {
-      lastStopSignal = 0;
-      Serial.print(" R: ");
-      Serial.print(rfrequency);
-      Serial.print(" G: ");
-      Serial.print(gfrequency);
-      Serial.print(" B: ");
-      Serial.println(bfrequency);
-    }*/
-
-    if(rfrequency <= 65 && rfrequency >= 45 && gfrequency <= 75 && gfrequency >= 50 && bfrequency <= 65 && gfrequency >= 40) {
-      //Table
-      continue;
-    } else if(rfrequency < bfrequency && rfrequency < gfrequency && rfrequency < 40) {
-      //Red
-      if(lastStopSignal == 2) {
-        myTrainHub.stopMotor(_port);
-        break;
-      }
-      else {
-        lastStopSignal = 2;
-      }
-      Serial.println("Red Signal");
-    } else if(gfrequency < rfrequency && gfrequency < bfrequency) {
-      //Green
-      if(lastStopSignal == 1 && !trainSlowed) {
-        myTrainHub.setMotorSpeed(_port, 20);
-        trainSlowed = true;
-        lastStopSignal = 0;
-      }
-      else {
-        lastStopSignal = 1;
-      }
-      Serial.println("Yellow Signal");
-    } else {
-      lastStopSignal = 0;
-      Serial.print(" R: ");
-      Serial.print(rfrequency);
-      Serial.print(" G: ");
-      Serial.print(gfrequency);
-      Serial.print(" B: ");
-      Serial.println(bfrequency);
-    }
+    bfrequency = map(bfrequency, 25,70,255,0);
   
-    /*if(rfrequency < bfrequency && rfrequency < gfrequency && rfrequency < 40) {
-      if(lastStopSignal == 1 && !trainSlowed) {
-        myTrainHub.setMotorSpeed(_port, 20);
-        trainSlowed = true;
+    if(rfrequency >= 200 && gfrequency >= 100 && bfrequency <= 175) {
+      if(lastStopSignal == 1) {
+        myTrainHub.setMotorSpeed(_port, 20);  
         lastStopSignal = 0;
       }
       else {
         lastStopSignal = 1;
       }
-      Serial.println("Yellow Signal");
-    } else if(rfrequency <= 48 && gfrequency >= 78) {
+    } else if(rfrequency >= 125 && gfrequency <= 100 &&bfrequency <= 50 ) {
       if(lastStopSignal == 2) {
         myTrainHub.stopMotor(_port);
         break;
@@ -211,17 +130,10 @@ void fillingTank() {
       else {
         lastStopSignal = 2;
       }
-      Serial.println("Red Signal");
     }
     else {
       lastStopSignal = 0;
-      Serial.print(" R: ");
-      Serial.print(rfrequency);
-      Serial.print(" G: ");
-      Serial.print(gfrequency);
-      Serial.print(" B: ");
-      Serial.println(bfrequency);
-    }*/
+    }
   }   
 }  
 
@@ -249,6 +161,15 @@ void handleNotFound() {
 }
 
 void setup(void) {
+  //Color Sensor 
+  pinMode(S0, OUTPUT);
+  pinMode(S1, OUTPUT);
+  pinMode(S2, OUTPUT);
+  pinMode(S3, OUTPUT);
+  pinMode(sensorOut, INPUT);
+  digitalWrite(S0,HIGH);
+  digitalWrite(S1,LOW);
+
   //Wifi
   pinMode(led, OUTPUT);
   digitalWrite(led, 0);
@@ -256,23 +177,18 @@ void setup(void) {
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   Serial.println("");
+
+  //LCD Screen
   lcd.init();
   lcd.backlight(); //Hintergrundbeleuchtung einschalten (lcd.noBacklight(); schaltet die Beleuchtung aus). 
   lcd.setCursor(0, 0);
-  lcd.print("Connecting Wifi");
-  delay(100); 
-  lcd.setCursor(0, 0);
-  int retry = 0;
+  lcd.print("Connecting Wifi..."); 
+
   // Wait for connection
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
-    retry = retry + 1;
-    if(retry >= 60){
-      ESP.restart();
-    }
   }
-  retry = 0;
   Serial.println("");
   Serial.print("Connected to ");
   Serial.println(ssid);
@@ -287,32 +203,15 @@ void setup(void) {
 
   server.on("/fillingTank", fillingTank);
 
-  server.on("/testmovevorwaerts", testMoveVorwaerts);
-
-  server.on("/testmoverueckwaerts", testMoveRueckwaerts);
+  server.on("/testMove", testMove);
 
   server.onNotFound(handleNotFound);
 
   server.begin();
   Serial.println("HTTP server started");
 
-
-  //LCD
-  lcd.setCursor(0, 0);
-  lcd.print("Connecting BLE ");
-  delay(200);
-  lcd.setCursor(0, 0);
-
-  //Color Sensor 
-  pinMode(S0, OUTPUT);
-  pinMode(S1, OUTPUT);
-  pinMode(S2, OUTPUT);
-  pinMode(S3, OUTPUT);
-  pinMode(sensorOut, INPUT);
-  digitalWrite(S0,HIGH);
-  digitalWrite(S1,LOW);
-
-  //Lego Train
+  lcd.print("Connecting BLE...");
+  
   myTrainHub.init(); // initalize the PoweredUpHub instance
   while(true) {
     if (myTrainHub.isConnecting()) {
@@ -320,6 +219,8 @@ void setup(void) {
       if (myTrainHub.isConnected()) {
         Serial.println("Connected to HUB");
         break;
+      } else {
+        Serial.println("Failed to connect to HUB");
       }
     }
   }
@@ -327,7 +228,7 @@ void setup(void) {
   lcd.setCursor(0, 0);
   lcd.print("Hydrogen Train"); 
   lcd.setCursor(0, 1);
-  lcd.print(WiFi.localIP()); 
+  lcd.print("Company XYZ"); 
 }
 
 /*-------------------------------------------Main loop-------------------------------------------------*/

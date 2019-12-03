@@ -1,0 +1,184 @@
+
+<html>
+	<head>
+		<link rel="stylesheet" href="./css/styles.css">
+	</head>
+	<script>
+		var newStep = 0;
+		var brand = null;
+		var currentStep = 0;
+		var instructionsField = null;
+		var loaderText = null;
+		var successText = null;
+
+		function onLoad() {
+			instructionsField = document.getElementById("message-instructions");
+			loaderText = document.getElementById("message-loader");
+			successText = document.getElementById("message-success");
+
+			setInterval(function() {
+				readJSON("./data/uidata.json", function(text){
+					var data = JSON.parse(text);
+					newStep = data.step;
+					brand = data.brand;
+					price = data.price
+				});
+
+				if(newStep !== currentStep) {
+					switch(newStep) {
+						case 1:
+							instructionsField.innerHTML = "Please turn on the train-control and the train";
+							showAnimation("instructions", null, "default");
+							break;
+						case 2:
+							instructionsField.innerHTML = "Please fill the Market Tank. \n Draining out the Gas Station Tank starts the process";
+							showAnimation("instructions", null, "default");
+							break;
+						case 3:
+							loaderText.innerHTML = "Choosing offer...";
+							showAnimation("loader", "scale-in-center", "scale-in-center", 1000);
+							break;
+						case 4:
+							var image = document.getElementById("img-image");
+							var imageText = document.getElementById("message-image");
+							imageText.innerHTML = "Chose offer: " + brand.charAt(0).toUpperCase() + brand.slice(1) + "\nPrice: " + price + " Gbytes";
+							image.src = "http://10.0.1.11:8080/img/" + brand.toLowerCase() + ".jpg";
+							showAnimation("image", "scale-in-center", "scale-in-center", 1000);
+							showAnimation("image", null, "scale-in-center", 1000);
+							break;
+						case 5:
+							loaderText.innerHTML = "Creating Smart Contract...";
+							showAnimation("loader", "scale-in-center", "scale-in-center", 1000);
+							break;
+						case 6:
+							successText.innerHTML = "Smart Contract created";
+							showAnimation("success", "slit-in-vertical", "scale-in-center", 1000);
+							break;
+						case 7:
+							loaderText.innerHTML = "Waiting for delivery...";
+							showAnimation("loader", "scale-in-center", "scale-in-center", 1000);
+							break;
+						case 8:
+							break;
+						case 9:
+							break;
+						case 10:
+							successText.innerHTML = 'Hydrogen delivered, posting "delivered" into DAG...';
+							showAnimation("success", "slit-in-vertical", "scale-in-center", 1000);
+							break;
+						case 11:
+							successText.innerHTML = "Done";
+							showAnimation("success", "slit-in-vertical", "scale-in-center", 1000);
+							break;
+						case 12:
+							successText.innerHTML = "Process finished!";
+							showAnimation("success", "slit-in-vertical", "scale-in-center", 1000);
+							break;
+						default:
+							break;
+					}
+					currentStep = newStep;
+				}
+			}, 10);
+		}
+
+		function showProcessFinished() {
+			showAnimation("success", "slit-in-vertical", "scale-in-center", 1000);
+		}
+
+		function showLoadingBar() {
+			showAnimation("loader-offers", "scale-in-center", "scale-in-center", 1000);
+		}
+
+		function switchInput() {
+			var input = document.getElementById("switchinput");
+			newStep = parseInt(input.value);
+			console.log(newStep);
+		}
+
+		function showAnimation(elementId, animationClassImg, animationClassText, duration) {
+			if(animationClassImg) {
+				var elementImg = document.getElementById("img-" + elementId);
+				addClass(elementImg, animationClassImg);
+				if(duration) {
+					removeClass(elementImg, animationClassImg, duration);
+				}
+			}
+			if(animationClassText) {
+				var elementText = document.getElementById("message-" + elementId);
+				elementText.style.visibility = "hidden";
+
+				setTimeout(function () {
+					addClass(elementText, animationClassText);
+					if (duration) {
+						removeClass(elementText, animationClassText, duration);
+					}
+				}, 250);
+			}
+
+			var anchor = document.getElementById("div-" + elementId);
+			anchor.scrollIntoView();
+		}
+
+		function removeClass (element, cssClass, duration) {
+			setTimeout(function() {element.classList.remove(cssClass);}, duration);
+		}
+
+		function addClass (element, cssClass) {
+			element.style.visibility = "visible";
+			element.classList.add(cssClass);
+		}
+
+		function readJSON(file, callback) {
+			var rawFile = new XMLHttpRequest();
+			rawFile.overrideMimeType("application/json");
+			rawFile.open("GET", file, true);
+			rawFile.onreadystatechange = function() {
+				if (rawFile.readyState === 4 && rawFile.status == "200") {
+					callback(rawFile.responseText);
+				}
+			};
+			rawFile.send(null);
+		}
+	</script>
+	<body onload="onLoad()">
+		<div>
+			<button onclick="showProcessFinished()">Success Process finished</button>
+			<button onclick="showLoadingBar()">Loading Bar</button>
+			<input id="switchinput" type="number" min="1" max="13">
+			<button onclick="switchInput()">Go</button>
+		</div>
+		<div class="placeholder">
+
+		</div>
+		<div id="div-instructions" class="centeredText">
+			<p id="message-instructions" class="successmessage" style="visibility: visible; margin: auto"></p>
+		</div>
+		<div class="placeholder">
+
+		</div>
+		<div id="div-loader" class="centered" style="padding-top: 75px">
+			<div id="img-loader" class="loader centered" style="visibility: hidden"></div>
+			<p id="message-loader" class="successmessage" style="visibility: hidden">Looking up available offers...</p>
+		</div>
+		<div class="placeholder">
+
+		</div>
+		<div>
+			<div id="div-success" class="centered">
+				<img id="img-success" class="icon success" src="./img/BoschIcons/checkmark-frame.svg" style="visibility: hidden">
+			</div>
+			<p id="message-success" class="successmessage" style="visibility: hidden; margin-block-start: 0em; margin-block-end: 0em;">Process finished!</p>
+		</div>
+		<div class="placeholder">
+
+		</div>
+		<div id="div-image" class="centered">
+			<img id="img-image" class="icon" src="./img/BoschIcons/checkmark.svg" style="visibility: hidden; width: 250px; height: 250px; display: block;margin-left: auto;margin-right: auto; padding-top: 5em;">
+			<p id="message-image" class="successmessage" style="visibility: hidden"></p>
+		</div>
+		<div class="placeholder">
+
+		</div>
+	</body>
+</html>

@@ -1,0 +1,229 @@
+body{
+	font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+	zoom: 0.7;
+	-moz-transform: scale(0.7);
+	-moz-transform-origin: 0 0;
+}
+
+ul {
+	padding: 0px;
+}
+li  {
+	border: 2px solid white;
+	padding: 4px;
+	margin: 3px;
+	list-style-type: none;
+	box-shadow: 2px 5px 9px #888888;
+	margin-bottom: 15px;
+}
+a   {
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	text-decoration: none;
+	color: black;
+}
+h4   {
+	margin-left: 2em;
+	font-size: 1.5em;
+}
+
+.pricetag   {
+	margin: auto;
+	margin-left: 35%;
+	position: absolute;
+	display: flex;
+	align-items: center;
+	vertical-align: center;
+	font-weight: bold;
+	font-size: 1.5em;
+}
+.pricetimeout   {
+	margin: auto;
+	margin-left: 75%;
+	position: absolute;
+	display: flex;
+	align-items: center;
+	vertical-align: center;
+	font-weight: bold;
+	font-size: 1.5em;
+}
+img {
+	margin-left: 2em;
+	height: 75px;
+	width: 75px;
+}
+
+.placeholder {
+	margin-top: 50em;
+}
+
+.centered {
+	margin: auto auto;
+	width: 50%;
+	height: 500px;
+	text-align: center;
+}
+
+.centeredText {
+	margin: auto auto;
+	width: 100%;
+	height: 720px;
+	text-align: center;
+	display: flex;
+	vertical-align: middle;
+}
+
+.icon {
+	vertical-align: middle;
+	horiz-align: center;
+	display: block;
+}
+
+.success {
+	filter: invert(34%) sepia(88%) saturate(1883%) hue-rotate(120deg) brightness(97%) contrast(98%);
+	height: 500px;
+	width: 500px;
+}
+
+.successmessage {
+	 text-align: center;
+	 font-weight: bold;
+	 font-size: 4em;
+	 color: #03a634;
+}
+
+.smart-contract-message {
+	text-align: center;
+	font-size: 2em;
+	font-weight: bold;
+	color: #03a634;
+	width: 33%;
+}
+
+.true {
+	color: #00e82b;
+	font-size: 4em;
+	margin-block-start: 0em;
+	margin-block-end: 0em;
+}
+
+.false {
+	color: #ff0000;
+	font-size: 4em;
+	margin-block-start: 0em;
+	margin-block-end: 0em;
+}
+
+.slit-in-vertical {
+	-webkit-animation: slit-in-vertical 0.45s ease-in ;
+	animation: slit-in-vertical 0.45s ease-in ;
+
+}
+
+.scale-in-center {
+	-webkit-animation: scale-in-center 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	animation: scale-in-center 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+
+.loader {
+	border: 25px solid #f3f3f3;
+	border-radius: 50%;
+	border-top: 25px solid #03a634;
+	width: 250px;
+	height: 250px;
+	-webkit-animation: spin 2s linear infinite; /* Safari */
+	animation: spin 2s linear infinite;
+}
+
+.smallloader {
+	border: 10px solid #f3f3f3;
+	border-radius: 50%;
+	border-top: 10px solid #03a634;
+	width: 100px;
+	height: 100px;
+	-webkit-animation: spin 2s linear infinite; /* Safari */
+	animation: spin 2s linear infinite;
+}
+
+.default {
+
+}
+
+span {
+	display: inline-block;
+	vertical-align: middle;
+	line-height: normal;
+}
+
+@-webkit-keyframes slit-in-vertical {
+	0% {
+		-webkit-transform: translateZ(-800px) rotateY(90deg);
+		transform: translateZ(-800px) rotateY(90deg);
+		opacity: 0;
+	}
+	54% {
+		-webkit-transform: translateZ(-160px) rotateY(87deg);
+		transform: translateZ(-160px) rotateY(87deg);
+		opacity: 1;
+	}
+	100% {
+		-webkit-transform: translateZ(0) rotateY(0);
+		transform: translateZ(0) rotateY(0);
+	}
+}
+@keyframes slit-in-vertical {
+	0% {
+		-webkit-transform: translateZ(-800px) rotateY(90deg);
+		transform: translateZ(-800px) rotateY(90deg);
+		opacity: 0;
+	}
+	54% {
+		-webkit-transform: translateZ(-160px) rotateY(87deg);
+		transform: translateZ(-160px) rotateY(87deg);
+		opacity: 1;
+	}
+	100% {
+		-webkit-transform: translateZ(0) rotateY(0);
+		transform: translateZ(0) rotateY(0);
+	}
+}
+
+@-webkit-keyframes scale-in-center {
+	0% {
+		-webkit-transform: scale(0);
+		transform: scale(0);
+		opacity: 1;
+	}
+	100% {
+		-webkit-transform: scale(1);
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+@keyframes scale-in-center {
+	0% {
+		-webkit-transform: scale(0);
+		transform: scale(0);
+		opacity: 1;
+	}
+	100% {
+		-webkit-transform: scale(1);
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+
+@-webkit-keyframes spin {
+	0% { -webkit-transform: rotate(0deg); }
+	100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}

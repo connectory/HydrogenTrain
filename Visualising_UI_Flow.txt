@@ -1,0 +1,31 @@
+Ablauf:
+1. Alle drei Bildschirme zeigen Instruktionen an: Esp/Train anschalten
+2. Esp schickt "On" an alle Rpis:
+	GS/Oracle zeigen Instruktionen an: Info - Tank leeren, um Prozess zu starten
+	Market: Zeigt Offers an
+3. Wenn Tank leer:
+	GS: Loading screen - Choosing offer 
+	Oracle: Loading screen - Waiting for SC to be created
+4. Nach 2 Sekunden:
+	GS: Zeigt günstigsten Anbieter an(mit Logo)
+5. Nach 2 Sekunden:
+	GS: Loading screen - Creating SC
+6. Nach Abschluss oder min. 1 Sek: 
+	GS: Success - SC created 
+7. Nach random 1-3 Sekunden: 
+	GS: Loading Screen - Waiting for delivery
+	Oracle: Status SC
+	Market: Loading Screen - Processing order
+8. Nach Beendigung füllen des Zugtanks:
+	Market: Success - Hydrogen sent, posting "sent" into DAG
+9. Nach 2 Sekunden:
+	Oracle: Aktualisierung SM
+	Market: Loading Screen - Waiting for completion of delivery
+10. Nach Ankunft Zug: 
+	GS: Success -  Hydrogen delivered, posting "delivered" into DAG
+11. Nach 2 Sekunden: 
+	GS: Success - Done
+	Oracle: Aktualisierung SM
+	Market: Success - Payment received
+12. Nach 3 Sekunden:
+	Alle: Success - Process finished
