@@ -661,8 +661,24 @@ function handleText(from_address, text, onUnknown){
 			hydrogenLabel = smartContractLabel;
 			
 			//move arm to filling position
-			const spawn = require("child_process").spawn;
-			const pythonProcess = spawn('python3',["./stepper.py", 'backward', '100']); //move arm via python script 
+			//const spawn = require("child_process").spawn;
+			//const pythonProcess = spawn('python3',["./stepper.py", 'backward', '100']); //move arm via python script 
+			/*let {PythonShell} = require('python-shell');
+			let options = {
+				mode: 'text',
+				args: ['backward', '100']
+			};
+			PythonShell.run("./stepper.py", options, function(err){console.error(err)}); //move arm via python script */
+			var cmd = require('node-cmd');
+			var pyProcess = cmd.run('python3 ' + __dirname + '/stepper.py backward 100',
+              function(data, err, stderr) {
+                if (!err) {
+                  console.error("data from python script " + data)
+                } else {
+                  console.error("python script cmd error: " + err)
+                  }
+                }
+              );
 			
 			//start filling train tank
 			setTimeout(function () {
@@ -679,7 +695,22 @@ function handleText(from_address, text, onUnknown){
 					//if train is unreachable or connection is lost, stop filling and move arm back to avoid further damage
 					pump.writeSync(0);
 					pump = new Gpio(18, 'in'); 
-					const pythonProcess = spawn('python3',["./stepper.py", 'forward', '100']); //move arm via python script 
+					//const pythonProcess = spawn('python3',["./stepper.py", 'forward', '100']); //move arm via python script 
+					//stepper_left();
+					/*let options = {
+						mode: 'text',
+						args: ['forward', '100']
+					};
+					PythonShell.run("./stepper.py", options, function(err){console.error(err)}); //move arm via python script */
+					var pyProcess = cmd.run('python3 ' + __dirname + '/stepper.py forward 100',
+					function(data, err, stderr) {
+						if (!err) {
+						console.error("data from python script " + data)
+						} else {
+						console.error("python script cmd error: " + err)
+						}
+						}
+					);
 				}
 			})
 
@@ -904,8 +935,24 @@ app.post("/trainTankFilled", function(req,res,next){
 	res.send(hydrogenLabel + "               ");
 
 	//move arm via python script 
-	const spawn = require("child_process").spawn;
-	const pythonProcess = spawn('python',["./stepper.py", 'forward', '100']);
+	//const spawn = require("child_process").spawn;
+	//const pythonProcess = spawn('python3',["./stepper.py", 'forward', '100']);
+	/*let {PythonShell}  = require('python-shell');
+	let options = {
+		mode: 'text',
+		args: ['forward', '100']
+	};
+	PythonShell.run("./stepper.py", options, function(err){console.error(err)}); //move arm via python script */
+	var cmd = require('node-cmd');
+			var pyProcess = cmd.run('python3 ' + __dirname + '/stepper.py forward 100',
+              function(data, err, stderr) {
+                if (!err) {
+                  console.log("data from python script " + data)
+                } else {
+                  console.error("python script cmd error: " + err)
+                  }
+                }
+              );
 
 	setTimeout(function(){
 		//advance to step 8 on UI
@@ -1266,3 +1313,120 @@ function refreshTimeouts() {
 	fs.writeFileSync(__dirname + '/public/data/pricestimeout.json', timeoutdata);
 }
 setInterval(refreshTimeouts, 100); 
+
+//step motor control
+
+var time = time = 0.002;
+
+function stepper_right() {
+	createGPIOs();
+
+	for(var i = 0; i < 100; i++) {
+		Step8();
+		Step7();
+		Step6();
+		Step5();
+		Step4();
+		Step3();
+		Step2();
+		Step1();
+	}	
+
+	unexportGPIOs();
+}
+
+function stepper_left() {
+	createGPIOs();
+
+	for(var i = 0; i < 100; i++) {
+		Step1();
+        Step2();
+        Step3();
+        Step4();
+        Step5();
+        Step6();
+        Step7();
+        Step8();
+	}	
+	
+	unexportGPIOs();
+}
+
+function Step1() {
+	IN4.writeSync(1);
+	setTimeout(function() {
+		IN4.writeSync(0);
+	}, time);
+}
+
+function Step2() {
+	IN4.writeSync(1);
+	IN3.writeSync(1);
+	setTimeout(function() {
+		IN4.writeSync(0);
+	IN3.writeSync(0);
+	}, time);
+}
+
+function Step3() {
+	IN3.writeSync(1);
+	setTimeout(function() {
+		IN3.writeSync(0);
+	}, time);
+}
+
+function Step4() {
+	IN2.writeSync(1);
+	IN3.writeSync(1);
+	setTimeout(function() {
+		IN2.writeSync(0);
+		IN3.writeSync(0);
+	}, time);
+}
+
+function Step5() {
+	IN2.writeSync(1);
+	setTimeout(function() {
+		IN2.writeSync(0);
+	}, time);
+}
+
+function Step6() {
+	IN1.writeSync(1);
+	IN2.writeSync(1);
+	setTimeout(function() {
+		IN1.writeSync(0);
+		IN2.writeSync(0);
+	}, time);
+}
+
+function Step7() {
+	IN1.writeSync(1);
+	setTimeout(function() {
+		IN1.writeSync(0);
+	}, time);
+}
+
+function Step8() {
+	IN4.writeSync(1);
+	IN1.writeSync(1);
+	setTimeout(function() {
+		IN4.writeSync(0);
+		IN1.writeSync(0);
+	}, time);
+}
+
+function createGPIOs() {
+	IN1 = new Gpio(6, 'out').writeSync(0); 
+	IN2 = new Gpio(13, 'out').writeSync(0); 
+	IN3 = new Gpio(19, 'out').writeSync(0); 
+	IN4 = new Gpio(26, 'out').writeSync(0); 
+}
+
+function unexportGPIOs() {
+	IN4.unexport();
+	IN3.unexport();
+	IN2.unexport();
+	IN1.unexport();
+}
+
